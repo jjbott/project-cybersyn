@@ -1,5 +1,6 @@
 --By Mami
 local flib_gui = require("__flib__.gui-lite")
+local manager = require('gui.main')
 
 local RED = "utility/status_not_working"
 local GREEN = "utility/status_working"
@@ -169,15 +170,19 @@ local function on_gui_opened(event)
 end
 
 local function on_gui_closed(event)
-	if not event.element or event.element.name ~= COMBINATOR_NAME then return end
-	local player = game.get_player(event.player_index)
-	if not player then return end
-	local rootgui = player.gui.screen
+	if event.element and event.element.name == COMBINATOR_NAME
+	then
+		local player = game.get_player(event.player_index)
+		if not player then return end
+		local rootgui = player.gui.screen
 
-	if rootgui[COMBINATOR_NAME] then
-		rootgui[COMBINATOR_NAME].destroy()
-		player.play_sound({path = COMBINATOR_CLOSE_SOUND})
+		if rootgui[COMBINATOR_NAME] then
+			rootgui[COMBINATOR_NAME].destroy()
+			player.play_sound({path = COMBINATOR_CLOSE_SOUND})
+		end
 	end
+
+	manager.on_gui_closed(event)
 end
 
 
