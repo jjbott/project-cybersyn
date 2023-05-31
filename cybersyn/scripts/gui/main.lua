@@ -145,12 +145,20 @@ local function init_items(manager)
 	end
 end
 
-
 function manager_gui.on_migration()
-	for i, v in pairs(global.manager.players) do
-		manager_gui.reset_player(i, v)
+	if global.manager then
+		for i, v in pairs(global.manager.players) do
+			manager_gui.reset_player(i, v)
+		end
+		init_items(global.manager)
+	else
+		global.manager = {
+			players = {},
+		}
+		for i, v in pairs(game.players) do
+			manager_gui.on_player_created({player_index = i})
+		end
 	end
-	init_items(global.manager)
 end
 
 function manager_gui.on_init()
